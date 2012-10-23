@@ -1,4 +1,7 @@
-nosql-intro
+Introduction to NoSQL
 ===========
 
-Introduction to NoSQL
+* Data models
+* Map-Reduce
+* Distribution
+* Consistency
