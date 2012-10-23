@@ -26,8 +26,10 @@
  * Consistency
  * Partition tolerance
  * Availability
+
    > Every request received by a nonfailing node in the system
    > must result in a response
+   
  * Tradeoff between consistency and availability/latency
 
 ## Durability
