@@ -1,7 +1,5 @@
 # Data Models
 
-## Data model
-
  * How we perceive the data
  * Not the storage model
  * Typically, the relational data model
@@ -14,12 +12,14 @@
  * Relationships are not enforced
  * Denormalization
  * Typically, no atomic operations spaning multiple aggregates (exception: RavenDB)
+ * Schemaless
 
 ## Key-value and document stores
 
  * Lookup by ID
  * The value can be opaque (key-value) or used by queries (document)
  * For key-value stores, you can integrate search tools for query support
+ * Model for data access
 
 ## Column-family stores
 
@@ -29,6 +29,14 @@
  * Column families (super-columns in Cassandra)
  * Storage model more suited for reading
  * Columns are ordered (name, timestamp, etc) 
+ * Model for data access
+
+## Materialized views
+
+ * Cached queries
+ * Can be stale
+ * Can be included in a document
+ * Map-reduce
 
 ## Graphs
 
@@ -43,4 +51,5 @@
  * Immutability
  * Time
  * Storage is cheap
- * Datomic
+ * Event sourcing
+ * Datomic (Memory Image)
