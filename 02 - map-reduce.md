@@ -8,13 +8,16 @@
 * Reduce combines map outputs with the same key
 * By example
 
-    from post in posts
-    from tag in post.Tags
-    select new { Name = tag.ToString().ToLower(), Count = 1 };
-	
-	from tagCount in results
-	group tagCount by tagCount.Name into g
-	select new { Name = g.Key, Count = g.Sum(x => x.Count) }
+```python
+from post in posts
+from tag in post.Tags
+select new { Name = tag.ToString().ToLower(), Count = 1 };
+ 
+from tagCount in results
+group tagCount by tagCount.Name into g
+select new { Name = g.Key, Count = g.Sum(x => x.Count) }
+```
+
 * Reduce should be combinable
 * Map-reduce pipeline
 * Incremental
