@@ -38,7 +38,7 @@ Implicitly defined in the application(s).
 
 **How do we list the documents in a collection?**
 
-   db.coll.find()
+    db.coll.find()
 
 * * *
 
