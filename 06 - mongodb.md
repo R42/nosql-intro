@@ -54,7 +54,7 @@ Implicitly defined in the application(s).
 
 Here you go:
 
-<!-- language: lang-js -->
+```javascript
 	(function() {
 		var titlePrefix = ['Some', 'More', 'About', 'Consider The'],
 				titleSuffix = ['Stuff', 'Things', 'Problems'],
@@ -94,6 +94,7 @@ Here you go:
 			return values;
 	  }
 	})();
+```
 
 * * *
 
@@ -150,7 +151,7 @@ In lots of ways:
 
 **Cute. Now show us some aggregations!**
 
-		<!-- language: lang-js -->
+```javascript
 		var map = function() {
 			var i;
 
@@ -177,6 +178,7 @@ In lots of ways:
 		}
 
 		db.blog.mapReduce(map, reduce, {out: {inline: 1}})
+```
 
 * * *
 
