@@ -208,11 +208,12 @@ No problem: `db.blog.ensureIndex({title: 1}, true)`
 
 ```java
 DB db...;
+DBCollection coll...;
 db.requestStart();
 try {
-   db.requestEnsureConnection();
-
-   code....
+   coll.insert(...);
+   DBObject err = db.getLastError();
+   ...
 } finally {
    db.requestDone();
 }
