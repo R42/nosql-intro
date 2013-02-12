@@ -184,7 +184,7 @@ var reduce = function(key, values) {
 		sum += value.count;
 	});
 
-	return sum;
+	return {count: sum};
 }
 
 db.blog.mapReduce(map, reduce, {out: {inline: 1}})
