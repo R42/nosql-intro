@@ -126,7 +126,7 @@ In lots of ways:
 
 **Oops.**
 
-    db.blog.remove({remove: 'Some interesting content'})
+    db.blog.remove({content: 'Some interesting content'})
     db.blog.insert({title: 'I am a title', content: 'Yadda, yadda, yadda', date: new Date(), tags: ['tag1', 'tag2'], upvotes: 1})
     db.blog.update({title: 'I am a title'}, {$set: {content: 'Some interesting content'}})
 
