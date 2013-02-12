@@ -66,22 +66,22 @@ Here you go:
 	    i;
 
 	for (i = 0; i < maxDocuments; ++i) {
-		  var doc = {
+	  	var doc = {
 		  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
 		  	content: 'Yadda, yadda, yadda',
-		  	date: (function(d) { return new Date(d.setDate(d.getDate() + rand(maxDocuments))); })(new Date()),
+		  	date: tap(new Date())(function(d) { d.setDate(d.getDate() + rand(maxDocuments)) }),
 		  	upvotes: rand(upvoteDelta) * tossCoin() ? 1 : -1,
 		  	tags: (function() {
 	  			var n = rand(tags.length),
 	  		    	    ts = tags.length;
-	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)];
+	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)]
 		  	})()
-  		};
+	  	}
 
   		if (tossCoin()) 
-  			doc.comments = ['Some Comment', 'Another Comment'];
+  			doc.comments = ['Some Comment', 'Another Comment']
 
-		db.blog.insert(doc);
+		db.blog.insert(doc)
   	}
 
 	function randInts(howMany, maxValue) {
@@ -89,9 +89,18 @@ Here you go:
   		    i;
 
 		for (i = 0; i < howMany; ++i) 
-			values[i] = rand(maxValue);
+			values[i] = rand(maxValue)
 
-		return values;
+		return values
+	}
+	
+	function tap (value) { 
+		return function (fn) {
+			if (typeof(fn) === 'function') { 
+				fn(value)
+			}
+			return value
+		}
 	}
 })();
 ```
