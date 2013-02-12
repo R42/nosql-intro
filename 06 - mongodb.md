@@ -138,6 +138,8 @@ In lots of ways:
     db.blog.insert({title: 'I am a title', content: 'Yadda, yadda, yadda', date: new Date(), tags: ['tag1', 'tag2'], upvotes: 1})
     db.blog.update({title: 'I am a title'}, {$set: {content: 'Some interesting content'}})
 
+* * *
+
 **What more can I do with update?**
 
 * `db.blog.update({title: 'I am a title'}, {$inc: {upvotes: -1}})`
