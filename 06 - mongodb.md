@@ -61,8 +61,8 @@ Here you go:
 	    tags = ['omg', 'humm', 'wtf'],
 	    upvoteDelta = 16,
 	    maxDocuments = 10,
-	    rand = function(max) { return Math.floor(Math.random() * max); },
-	    tossCoin = function() { return rand(2) > 0; },
+	    rand = function(max) { return Math.floor(Math.random() * max) },
+	    tossCoin = function() { return rand(2) > 0 },
 	    i;
 
 	for (i = 0; i < maxDocuments; ++i) {
@@ -73,8 +73,8 @@ Here you go:
 		  	upvotes: rand(upvoteDelta) * tossCoin() ? 1 : -1,
 		  	tags: (function() {
 	  			var n = rand(tags.length),
-	  		    	    ts = tags.length;
-	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)]
+	  			    ts = tags.length;
+	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i] }) : tags[rand(ts)]
 		  	})()
 	  	}
 
@@ -96,10 +96,7 @@ Here you go:
 	
 	function tap (value) { 
 		return function (fn) {
-			if (typeof(fn) === 'function') { 
-				fn(value)
-			}
-			return value
+			return typeof(fn) === 'function') ? fn(value) : value;
 		}
 	}
 })();
