@@ -70,7 +70,7 @@ Here you go:
 		  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
 		  	content: 'Yadda, yadda, yadda',
 		  	date: tap(new Date())(function(d) { d.setDate(d.getDate() + rand(maxDocuments)); }),
-		  	upvotes: rand(upvoteDelta) * tossCoin() ? 1 : -1,
+		  	upvotes: rand(upvoteDelta) * (tossCoin() ? 1 : -1),
 		  	tags: (function() {
 	  			var n = rand(tags.length),
 	  			    ts = tags.length;
