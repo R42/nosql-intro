@@ -76,7 +76,7 @@ Here you go:
 	  			    ts = tags.length;
 	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i] }) : tags[rand(ts)]
 		  	})()
-	  	}
+	  	};
 
   		if (tossCoin()) 
   			doc.comments = ['Some Comment', 'Another Comment']
@@ -96,7 +96,10 @@ Here you go:
 	
 	function tap (value) { 
 		return function (fn) {
-			return typeof(fn) === 'function') ? fn(value) : value;
+			if (typeof(fn) === 'function') {
+				fn(value)
+			}
+			return value
 		}
 	}
 })();
