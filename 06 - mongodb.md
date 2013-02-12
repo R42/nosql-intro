@@ -55,45 +55,45 @@ Implicitly defined in the application(s).
 Here you go:
 
 ```javascript
-	(function() {
-		var titlePrefix = ['Some', 'More', 'About', 'Consider The'],
-				titleSuffix = ['Stuff', 'Things', 'Problems'],
-				tags = ['omg', 'humm', 'wtf'],
-				upvoteDelta = 16,
-				maxDocuments = 10,
-				rand = function(max) { return Math.floor(Math.random() * max); },
-				decide = function(what) { return rand(2) > 0; },
-				i;
+(function() {
+	var titlePrefix = ['Some', 'More', 'About', 'Consider The'],
+			titleSuffix = ['Stuff', 'Things', 'Problems'],
+			tags = ['omg', 'humm', 'wtf'],
+			upvoteDelta = 16,
+			maxDocuments = 10,
+			rand = function(max) { return Math.floor(Math.random() * max); },
+			decide = function(what) { return rand(2) > 0; },
+			i;
 
-		for (i = 0; i < maxDocuments; ++i) {
-			  var doc = {
-			  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
-			  	content: 'Yadda, yadda, yadda',
-			  	date: (function(d) { return new Date(d.setDate(d.getDate() + rand(maxDocuments))); })(new Date()),
-			  	upvotes: rand(upvoteDelta) * (decide('if negative') ? 1 : -1),
-			  	tags: (function() {
-			  		var n = rand(tags.length),
-			  				ts = tags.length;
-			  		return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)];
-			  	})()
-	  		};
+	for (i = 0; i < maxDocuments; ++i) {
+		  var doc = {
+		  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
+		  	content: 'Yadda, yadda, yadda',
+		  	date: (function(d) { return new Date(d.setDate(d.getDate() + rand(maxDocuments))); })(new Date()),
+		  	upvotes: rand(upvoteDelta) * (decide('if negative') ? 1 : -1),
+		  	tags: (function() {
+	  			var n = rand(tags.length),
+	  		    	    ts = tags.length;
+	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)];
+		  	})()
+  		};
 
-	  		if (decide('has comments')) 
-	  			doc.comments = ['Some Comment', 'Another Comment'];
+  		if (decide('has comments')) 
+  			doc.comments = ['Some Comment', 'Another Comment'];
 
-				db.blog.insert(doc);
-	  }
+			db.blog.insert(doc);
+  }
 
-	  function randInts(howMany, maxValue) {
-	  	var values = new Array(howMany),
-	  			i;
+  function randInts(howMany, maxValue) {
+  	var values = new Array(howMany),
+  			i;
 
-			for (i = 0; i < howMany; ++i) 
-				values[i] = rand(maxValue);
+		for (i = 0; i < howMany; ++i) 
+			values[i] = rand(maxValue);
 
-			return values;
-	  }
-	})();
+		return values;
+  }
+})();
 ```
 
 * * *
@@ -152,32 +152,32 @@ In lots of ways:
 **Cute. Now show us some aggregations!**
 
 ```javascript
-		var map = function() {
-			var i;
+	var map = function() {
+		var i;
 
-			if (this.tags === void 0)
-				return;
+		if (this.tags === void 0)
+			return;
 
-			if (!(this.tags instanceof Array)) {
-				emit(this.tags, {count: 1});
-				return;
-			}
-
-			for (i in this.tags)
-				emit(this.tags[i], {count: 1});
+		if (!(this.tags instanceof Array)) {
+			emit(this.tags, {count: 1});
+			return;
 		}
 
-		var reduce = function(key, values) {
-			var sum = 0;
+		for (i in this.tags)
+			emit(this.tags[i], {count: 1});
+	}
 
-			values.forEach(function(value) {
-				sum += value.count;
-			});
+	var reduce = function(key, values) {
+		var sum = 0;
 
-			return sum;
-		}
+		values.forEach(function(value) {
+			sum += value.count;
+		});
 
-		db.blog.mapReduce(map, reduce, {out: {inline: 1}})
+		return sum;
+	}
+
+	db.blog.mapReduce(map, reduce, {out: {inline: 1}})
 ```
 
 * * *
@@ -206,16 +206,18 @@ No problem: `db.blog.ensureIndex({title: 1}, true)`
 
 **What about concurrency?**
 
-		DB db...;
-		db.requestStart();
-		try {
-		   db.requestEnsureConnection();
-		
-		   code....
-		} finally {
-		   db.requestDone();
-		}
-		
+```java
+	DB db...;
+	db.requestStart();
+	try {
+	   db.requestEnsureConnection();
+	
+	   code....
+	} finally {
+	   db.requestDone();
+	}
+```
+
 * * *		
 
 **Tell us more!**
