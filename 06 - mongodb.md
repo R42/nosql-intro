@@ -30,7 +30,7 @@ Implicitly defined in the application(s).
 
 * * *
 
-**How do we list the collections in the DB?**
+**How do we list the collections in a DB?**
 
     db.getCollectionNames()
 
