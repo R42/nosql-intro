@@ -152,32 +152,32 @@ In lots of ways:
 **Cute. Now show us some aggregations!**
 
 ```javascript
-	var map = function() {
-		var i;
+var map = function() {
+	var i;
 
-		if (this.tags === void 0)
-			return;
+	if (this.tags === void 0)
+		return;
 
-		if (!(this.tags instanceof Array)) {
-			emit(this.tags, {count: 1});
-			return;
-		}
-
-		for (i in this.tags)
-			emit(this.tags[i], {count: 1});
+	if (!(this.tags instanceof Array)) {
+		emit(this.tags, {count: 1});
+		return;
 	}
 
-	var reduce = function(key, values) {
-		var sum = 0;
+	for (i in this.tags)
+		emit(this.tags[i], {count: 1});
+}
 
-		values.forEach(function(value) {
-			sum += value.count;
-		});
+var reduce = function(key, values) {
+	var sum = 0;
 
-		return sum;
-	}
+	values.forEach(function(value) {
+		sum += value.count;
+	});
 
-	db.blog.mapReduce(map, reduce, {out: {inline: 1}})
+	return sum;
+}
+
+db.blog.mapReduce(map, reduce, {out: {inline: 1}})
 ```
 
 * * *
@@ -207,15 +207,15 @@ No problem: `db.blog.ensureIndex({title: 1}, true)`
 **What about concurrency?**
 
 ```java
-	DB db...;
-	db.requestStart();
-	try {
-	   db.requestEnsureConnection();
-	
-	   code....
-	} finally {
-	   db.requestDone();
-	}
+DB db...;
+db.requestStart();
+try {
+   db.requestEnsureConnection();
+
+   code....
+} finally {
+   db.requestDone();
+}
 ```
 
 * * *		
