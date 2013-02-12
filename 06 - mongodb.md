@@ -38,7 +38,7 @@ Implicitly defined in the application(s).
 
 **How do we list the documents in a collection?**
 
-    db.coll.find()
+    db.blog.find()
 
 * * *
 
@@ -57,20 +57,20 @@ Here you go:
 ```javascript
 (function() {
 	var titlePrefix = ['Some', 'More', 'About', 'Consider The'],
-			titleSuffix = ['Stuff', 'Things', 'Problems'],
-			tags = ['omg', 'humm', 'wtf'],
-			upvoteDelta = 16,
-			maxDocuments = 10,
-			rand = function(max) { return Math.floor(Math.random() * max); },
-			decide = function(what) { return rand(2) > 0; },
-			i;
+	    titleSuffix = ['Stuff', 'Things', 'Problems'],
+	    tags = ['omg', 'humm', 'wtf'],
+	    upvoteDelta = 16,
+	    maxDocuments = 10,
+	    rand = function(max) { return Math.floor(Math.random() * max); },
+	    tossCoin = function() { return rand(2) > 0; },
+	    i;
 
 	for (i = 0; i < maxDocuments; ++i) {
 		  var doc = {
 		  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
 		  	content: 'Yadda, yadda, yadda',
 		  	date: (function(d) { return new Date(d.setDate(d.getDate() + rand(maxDocuments))); })(new Date()),
-		  	upvotes: rand(upvoteDelta) * (decide('if negative') ? 1 : -1),
+		  	upvotes: rand(upvoteDelta) * tossCoin() ? 1 : -1,
 		  	tags: (function() {
 	  			var n = rand(tags.length),
 	  		    	    ts = tags.length;
@@ -78,21 +78,21 @@ Here you go:
 		  	})()
   		};
 
-  		if (decide('has comments')) 
+  		if (tossCoin()) 
   			doc.comments = ['Some Comment', 'Another Comment'];
 
-			db.blog.insert(doc);
-  }
+		db.blog.insert(doc);
+  	}
 
-  function randInts(howMany, maxValue) {
-  	var values = new Array(howMany),
-  			i;
+	function randInts(howMany, maxValue) {
+	  	var values = new Array(howMany),
+  		    i;
 
 		for (i = 0; i < howMany; ++i) 
 			values[i] = rand(maxValue);
 
 		return values;
-  }
+	}
 })();
 ```
 
