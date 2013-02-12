@@ -204,6 +204,20 @@ No problem: `db.blog.ensureIndex({title: 1}, true)`
 
 * * *
 
+**What about concurrency?**
+
+		DB db...;
+		db.requestStart();
+		try {
+		   db.requestEnsureConnection();
+		
+		   code....
+		} finally {
+		   db.requestDone();
+		}
+		
+* * *		
+
 **Tell us more!**
 
 * Drivers in lots of languages
