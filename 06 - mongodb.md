@@ -30,7 +30,7 @@ Implicitly defined in the application(s).
 
 * * *
 
-**How do we list the collections in the DB?**
+**How do we list the collections in a DB?**
 
     db.getCollectionNames()
 
@@ -38,7 +38,7 @@ Implicitly defined in the application(s).
 
 **How do we list the documents in a collection?**
 
-    db.coll.find()
+    db.blog.find()
 
 * * *
 
@@ -55,45 +55,53 @@ Implicitly defined in the application(s).
 Here you go:
 
 ```javascript
-	(function() {
-		var titlePrefix = ['Some', 'More', 'About', 'Consider The'],
-				titleSuffix = ['Stuff', 'Things', 'Problems'],
-				tags = ['omg', 'humm', 'wtf'],
-				upvoteDelta = 16,
-				maxDocuments = 10,
-				rand = function(max) { return Math.floor(Math.random() * max); },
-				decide = function(what) { return rand(2) > 0; },
-				i;
+(function() {
+	var titlePrefix = ['Some', 'More', 'About', 'Consider The'],
+	    titleSuffix = ['Stuff', 'Things', 'Problems'],
+	    tags = ['omg', 'humm', 'wtf'],
+	    upvoteDelta = 16,
+	    maxDocuments = 10,
+	    rand = function(max) { return Math.floor(Math.random() * max); },
+	    tossCoin = function() { return rand(2) > 0; },
+	    i;
 
-		for (i = 0; i < maxDocuments; ++i) {
-			  var doc = {
-			  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
-			  	content: 'Yadda, yadda, yadda',
-			  	date: (function(d) { return new Date(d.setDate(d.getDate() + rand(maxDocuments))); })(new Date()),
-			  	upvotes: rand(upvoteDelta) * (decide('if negative') ? 1 : -1),
-			  	tags: (function() {
-			  		var n = rand(tags.length),
-			  				ts = tags.length;
-			  		return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)];
-			  	})()
-	  		};
+	for (i = 0; i < maxDocuments; ++i) {
+	  	var doc = {
+		  	title: titlePrefix[rand(titlePrefix.length)] + ' ' + titleSuffix[rand(titleSuffix.length)],
+		  	content: 'Yadda, yadda, yadda',
+		  	date: tap(new Date())(function(d) { d.setDate(d.getDate() + rand(maxDocuments)); }),
+		  	upvotes: rand(upvoteDelta) * (tossCoin() ? 1 : -1),
+		  	tags: (function() {
+	  			var n = rand(tags.length),
+	  			    ts = tags.length;
+	  			return n > 1 ? randInts(n, ts).map(function(i) { return tags[i]; }) : tags[rand(ts)]
+		  	})()
+	  	};
 
-	  		if (decide('has comments')) 
-	  			doc.comments = ['Some Comment', 'Another Comment'];
+  		if (tossCoin()) 
+  			doc.comments = ['Some Comment', 'Another Comment'];
 
-				db.blog.insert(doc);
-	  }
+		db.blog.insert(doc);
+  	}
 
-	  function randInts(howMany, maxValue) {
+	function randInts(howMany, maxValue) {
 	  	var values = new Array(howMany),
-	  			i;
+  		    i;
 
-			for (i = 0; i < howMany; ++i) 
-				values[i] = rand(maxValue);
+		for (i = 0; i < howMany; ++i) 
+			values[i] = rand(maxValue);
 
-			return values;
-	  }
-	})();
+		return values;
+	}
+	
+	function tap (value) { 
+		return function (fn) {
+			if (typeof(fn) === 'function')
+				fn(value);
+			return value;
+		};
+	}
+})();
 ```
 
 * * *
@@ -126,9 +134,11 @@ In lots of ways:
 
 **Oops.**
 
-    db.blog.remove({remove: 'Some interesting content'})
+    db.blog.remove({content: 'Some interesting content'})
     db.blog.insert({title: 'I am a title', content: 'Yadda, yadda, yadda', date: new Date(), tags: ['tag1', 'tag2'], upvotes: 1})
     db.blog.update({title: 'I am a title'}, {$set: {content: 'Some interesting content'}})
+
+* * *
 
 **What more can I do with update?**
 
@@ -152,32 +162,32 @@ In lots of ways:
 **Cute. Now show us some aggregations!**
 
 ```javascript
-		var map = function() {
-			var i;
+var map = function() {
+	var i;
 
-			if (this.tags === void 0)
-				return;
+	if (this.tags === void 0)
+		return;
 
-			if (!(this.tags instanceof Array)) {
-				emit(this.tags, {count: 1});
-				return;
-			}
+	if (!(this.tags instanceof Array)) {
+		emit(this.tags, {count: 1});
+		return;
+	}
 
-			for (i in this.tags)
-				emit(this.tags[i], {count: 1});
-		}
+	for (i in this.tags)
+		emit(this.tags[i], {count: 1});
+}
 
-		var reduce = function(key, values) {
-			var sum = 0;
+var reduce = function(key, values) {
+	var sum = 0;
 
-			values.forEach(function(value) {
-				sum += value.count;
-			});
+	values.forEach(function(value) {
+		sum += value.count;
+	});
 
-			return sum;
-		}
+	return sum;
+}
 
-		db.blog.mapReduce(map, reduce, {out: {inline: 1}})
+db.blog.mapReduce(map, reduce, {out: {inline: 1}})
 ```
 
 * * *
@@ -203,6 +213,23 @@ No problem: `db.blog.ensureIndex({title: 1}, true)`
 * `db.blog.find({title: "I am a title"}).explain()`
 
 * * *
+
+**What about concurrency?**
+
+```java
+DB db...;
+DBCollection coll...;
+db.requestStart();
+try {
+   coll.insert(...);
+   DBObject err = db.getLastError();
+   ...
+} finally {
+   db.requestDone();
+}
+```
+
+* * *		
 
 **Tell us more!**
 
